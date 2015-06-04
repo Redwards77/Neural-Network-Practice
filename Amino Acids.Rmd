@@ -1,0 +1,12 @@
+---
+title: "Amino Acid"
+author: "Richard Edwards"
+date: "June 4, 2015"
+output: html_document
+---
+
+
+
+```{r}
+```
+
