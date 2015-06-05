@@ -45,8 +45,50 @@ Y <- c("CH2", Phenol)                      #Tyrosine (Tyr)
 ```
 
 ```{r}
-#Acquire Mutant Table
+#Classifying AA into groups
+
+AAclassifier <- function(AA){
+  class = list()
+  n = length(AA)
+  if(n <= 3){                   #classifier for Small
+    class$small <- "Small"      #and Tiny AA residues
+    if(n < 3){
+      class$small <-"Small//Tiny"
+    }
+  }
+  if(!is.na(match("C",AA)) == TRUE) {
+    if(AA[match("C",AA):(length(Phenyl)+1)] == Phenyl ||
+       AA[match("C",AA):(length(Imidazole)+1)] == Imidazole ||
+       AA[match("C",AA):(length(Indole)+1)] == Indole ||
+       AA[match("C",AA):(length(Phenol)+1)] == Phenol){
+          
+         class$aromatic <- "Aromatic"
+       }
+
+  
+  
+}
+
+
+```
+
+```{r}
+#Acquire Mutant Frequency Table
  html("http://www.abren.net/protherm/mutation.html")%>%
 + html_node("table")%>%
 + html_table(fill=T) -> aATable
+
+
+#Acquire Further Data
+url <- "http://www.abren.net/protherm/protherm_result.php?&DISP01=1&DISP02=1&DISP10=1&DISP14=1&DISP16=1&DISP18=1&DISP19=1&DISP22=1&DISP23=1&DISP24=1&DISP26=1&DISP30=1&DISP31=1&DISP38=1&NUMBER2=3000000&SOURCE=human&MUTA-C0=on&ASA-C=0-Any&ASA3=0-%&PH1=6.8&PH2=8.2&COUNT_E2=980&COUNT_S2=0"
+
+xp <- '/html/body/table[2]'
+
+AASearch <- url %>%
+  html() %>%
+  html_nodes(xpath=xp)%>%
+  html_table(fill=TRUE)
+AASearch <- AASearch[[1]]
+AASearch <- AASearch[-c(16:21)]
+names(AASearch) <- c("Entry","Protein","Source","Mutation","dG_H2O","dG","T", "Tm","dHcal","m","Cm","pH","Measure","Method",	"REFERENCE")
 ```
