@@ -8,5 +8,45 @@ output: html_document
 
 
 ```{r}
+#Amino Acids                                         NH2
+ #                                                   |
+ #All Amino Acids have the general composition of   HC--CO2 with the 'R' group
+ #                                                   |      specifying the 
+ #                                                   R      amino acid residue
+ 
+ #Defining Aromatic 'R' Groups
+ Phenyl <- c("C",rep("CH",5))
+ Imidazole <- c("C","CH","NH","CH","NH+")
+ Indole <- c("C","CH","NH","C","C",rep("CH",4))
+ Phenol <- c("C","CH","CH","C_OH","CH","CH")
+ #The following will relate the 1-letter abreviation of 
+ #the 20 AA residues with their respecitve 'R' groups
+
+A <- c("CH3")                              #Alanine (Ala)
+C <- c("CH2", "SH")                        #Cysteine (Cys)
+D <- c("CH2","COO-")                       #Aspartate (Asp)
+E <- c("CH2","CH2","COO-")                 #Glutamate (Glu)
+F <- c("CH2",Phenyl)                       #Phenylalanine (Phe)
+G <- c("H")                                #Glycine (Gly)
+H <- c("CH2",Imidazole)                    #Histidine (His)
+I <- c("Methyl_CH","CH2","CH3")            #IsoLeucine (Ile)
+K <- c(rep("CH2",4), "NH3+")               #Lysine (Lys)
+L <- c("CH2","Methyl_CH","CH3")            #Leucine (Leu)
+M <- c("CH2","CH2","S","CH3")              #Methionine (Met)
+N <- c("CH2","CO","NH2")                   #Asparagine (Asn)
+P <- c("CH2","CH2","CH2")                  #Proline (Pro)
+Q <- c("CH2","CH2","CO","NH2")             #Glutamine (Gln)
+R <- c(rep("CH2",3), "NH", "CNH2+","NH2")  #Arginine (Arg)
+S <- c("CH2","OH")                         #Serine (Ser)
+T <- c("CH2","CH3","OH")                   #Threonine (Thr)
+V <- c("Methyl_CH","CH3")                  #Valine (Val)
+W <- c("CH2",Indole)                       #Tryptophan (Trp)
+Y <- c("CH2", Phenol)                      #Tyrosine (Tyr)
 ```
 
+```{r}
+#Acquire Mutant Table
+ html("http://www.abren.net/protherm/mutation.html")%>%
++ html_node("table")%>%
++ html_table(fill=T) -> aATable
+```
