@@ -48,28 +48,60 @@ Y <- c("CH2", Phenol)                      #Tyrosine (Tyr)
 #Classifying AA into groups
 
 AAclassifier <- function(AA){
-  class = list()
+  
+  class = data.frame(size,hydrophobic,polar,aromatic)
   n = length(AA)
+ 
   if(n <= 3){                   #classifier for Small
-    class$small <- "Small"      #and Tiny AA residues
-    if(n < 3){
-      class$small <-"Small//Tiny"
-    }
+                                #and Tiny AA residues
+   class$size <- "Small"     
+    
+   if(n < 3){
+      
+     class$size <-"Tiny"
+   }
   }
-  if(!is.na(match("C",AA)) == TRUE) {
+  else{
+    class$size <- ""
+  }
+  
+  if(!is.na(match("C",AA)) == TRUE) {     #classifier for Aromaticity
+    
     if(AA[match("C",AA):(length(Phenyl)+1)] == Phenyl ||
        AA[match("C",AA):(length(Imidazole)+1)] == Imidazole ||
        AA[match("C",AA):(length(Indole)+1)] == Indole ||
        AA[match("C",AA):(length(Phenol)+1)] == Phenol){
           
          class$aromatic <- "Aromatic"
-       }
+    }
+  }
+  else{
+    class$aromatic <- ""
+  }
 
+  if(){
+    
+    if(!is.na(match("Methyl_CH",AA)) == TRUE){  #classifierf for Aliphatic
+    class$hydrophobic <- c("Hydrophobic","Aliphatic")    
+    }
+  }
+  if(length(grep("OH|SH|+|-",AA,fixed=TRUE)) != 0
+     ){ #classifier for polar
+    
+    class$polar = "Polar"
+    
+    if(!is.na(match("COO-",AA)) == TRUE){ #classifier for neg. charge
+    
+      class$charge <- "Charge(-)"
+    }
   
-  
+    if(length(grep("+",AA,fixed=TRUE)) != 0){ #classifier for pos. charge
+    
+      class$charge <- "Charge(+)"
+    }
+  }
+  return(class)
 }
-
-
 ```
 
 ```{r}
