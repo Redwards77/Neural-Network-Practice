@@ -38,7 +38,7 @@ P <- c("CH2","CH2","CH2")                  #Proline (Pro)
 Q <- c("CH2","CH2","CO","NH2")             #Glutamine (Gln)
 R <- c(rep("CH2",3), "NH", "CNH2+","NH2")  #Arginine (Arg)
 S <- c("CH2","OH")                         #Serine (Ser)
-T <- c("CH2","CH3","OH")                   #Threonine (Thr)
+T <- c("CH","OH","CH3")                   #Threonine (Thr)
 V <- c("Methyl_CH","CH3")                  #Valine (Val)
 W <- c("CH2",Indole)                       #Tryptophan (Trp)
 Y <- c("CH2", Phenol)                      #Tyrosine (Tyr)
@@ -105,11 +105,13 @@ AAclassifier <- function(AA){
 ```
 
 ```{r}
+library(selectr)
 #Acquire Mutant Frequency Table
  html("http://www.abren.net/protherm/mutation.html")%>%
 + html_node("table")%>%
 + html_table(fill=T) -> aATable
 
+#---------------------------------------------------------------------------
 
 #Acquire Further Data
 url <- "http://www.abren.net/protherm/protherm_result.php?&DISP01=1&DISP02=1&DISP10=1&DISP14=1&DISP16=1&DISP18=1&DISP19=1&DISP22=1&DISP23=1&DISP24=1&DISP26=1&DISP30=1&DISP31=1&DISP38=1&NUMBER2=3000000&SOURCE=human&MUTA-C0=on&ASA-C=0-Any&ASA3=0-%&PH1=6.8&PH2=8.2&COUNT_E2=980&COUNT_S2=0"
@@ -118,9 +120,43 @@ xp <- '/html/body/table[2]'
 
 AASearch <- url %>%
   html() %>%
-  html_nodes(xpath=xp)%>%
+  html_nodes(xpath=xp) %>%
   html_table(fill=TRUE)
 AASearch <- AASearch[[1]]
 AASearch <- AASearch[-c(16:21)]
 names(AASearch) <- c("Entry","Protein","Source","Mutation","dG_H2O","dG","T", "Tm","dHcal","m","Cm","pH","Measure","Method",	"REFERENCE")
+
+#--------------------------------------------------------------------------
+
+url<- "http://p53.iarc.fr/AAProperties.aspx"
+  
+xp <- '//*[@id="aapropform"]/table'
+
+AAProp <- url %>%
+  html() %>%
+  html_nodes(xpath=xp) %>%
+  html_table(fill=TRUE)
+AAProp <- AAProp[[1]]
+AAProp <- AAProp[1:(nrow(AAProp)-1),]
+
+#---------------------------------------------------------------------------
+
+url <- "http://www.mhhe.com/physsci/chemistry/carey5e/Ch27/ch27-1-4-2.html"
+
+AAPI <- url %>%
+  html() %>%
+  html_nodes("table") %>%
+  html_table(fill=TRUE)                  #generates the table from the webpage
+AAPI <- AAPI[[2]]
+names_AAPI <- AAPI[1,]                   #extracts the names from the first row
+names_AAPI <- gsub("Â","",names_AAPI)    #removes Â characters (Å = alt 0194)
+AAPI <- AAPI[2:21,]                   #extracts the amino acid data   
+AAPI <- gsub("Â| ","",AAPI)             
+AAPI <- gsub("\"","",AAPI)            #removes all the \'s
+AAPI <- sub("c","",AAPI)              #removes the 1st c from each line
+AAPI <- gsub("(","",AAPI,fixed=TRUE)  #removes all the ('s
+AAPI <- gsub(")","",AAPI,fixed=TRUE)  #removes all the )'s
+AAPI <- strsplit(AAPI,split=",")      #splits the character arrays
+AAPI <- as.data.frame(AAPI)           #remakes the data frame/table
+names(AAPI) <- names_AAPI             #replaces the name with the original
 ```
