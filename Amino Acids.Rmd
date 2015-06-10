@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-
+Coding for the Side Chain group of the 20 common Amino Acids
 ```{r}
 #Amino Acids                                         NH2
  #                                                   |
@@ -22,26 +22,53 @@ output: html_document
  #The following will relate the 1-letter abreviation of 
  #the 20 AA residues with their respecitve 'R' groups
 
-A <- c("CH3")                              #Alanine (Ala)
-C <- c("CH2", "SH")                        #Cysteine (Cys)
-D <- c("CH2","COO-")                       #Aspartate (Asp)
-E <- c("CH2","CH2","COO-")                 #Glutamate (Glu)
-F <- c("CH2",Phenyl)                       #Phenylalanine (Phe)
-G <- c("H")                                #Glycine (Gly)
-H <- c("CH2",Imidazole)                    #Histidine (His)
-I <- c("Methyl_CH","CH2","CH3")            #IsoLeucine (Ile)
-K <- c(rep("CH2",4), "NH3+")               #Lysine (Lys)
-L <- c("CH2","Methyl_CH","CH3")            #Leucine (Leu)
-M <- c("CH2","CH2","S","CH3")              #Methionine (Met)
-N <- c("CH2","CO","NH2")                   #Asparagine (Asn)
-P <- c("CH2","CH2","CH2")                  #Proline (Pro)
-Q <- c("CH2","CH2","CO","NH2")             #Glutamine (Gln)
-R <- c(rep("CH2",3), "NH", "CNH2+","NH2")  #Arginine (Arg)
-S <- c("CH2","OH")                         #Serine (Ser)
-T <- c("CH","OH","CH3")                   #Threonine (Thr)
-V <- c("Methyl_CH","CH3")                  #Valine (Val)
-W <- c("CH2",Indole)                       #Tryptophan (Trp)
-Y <- c("CH2", Phenol)                      #Tyrosine (Tyr)
+A <- Ala <- c("CH3")                              #Alanine (Ala)
+C <- Cys <- c("CH2", "SH")                        #Cysteine (Cys)
+D <- Asp <- c("CH2","COO-")                       #Aspartate (Asp)
+E <- Glu <- c("CH2","CH2","COO-")                 #Glutamate (Glu)
+F <- Phe <- c("CH2",Phenyl)                       #Phenylalanine (Phe)
+G <- Gly <- c("H")                                #Glycine (Gly)
+H <- His <- c("CH2",Imidazole)                    #Histidine (His)
+I <- Ile <- c("Methyl_CH","CH2","CH3")            #IsoLeucine (Ile)
+K <- Lys <- c(rep("CH2",4), "NH3+")               #Lysine (Lys)
+L <- Leu <- c("CH2","Methyl_CH","CH3")            #Leucine (Leu)
+M <- Met <- c("CH2","CH2","S","CH3")              #Methionine (Met)
+N <- Asn <- c("CH2","CO","NH2")                   #Asparagine (Asn)
+P <- Pro <- c("CH2","CH2","CH2")                  #Proline (Pro)
+Q <- Gln <- c("CH2","CH2","CO","NH2")             #Glutamine (Gln)
+R <- Arg <- c(rep("CH2",3), "NH", "CNH2+","NH2")  #Arginine (Arg)
+S <- Ser <- c("CH2","OH")                         #Serine (Ser)
+T <- Thr <- c("CH","OH","CH3")                   #Threonine (Thr)
+V <- Val <- c("Methyl_CH","CH3")                  #Valine (Val)
+W <- Trp <- c("CH2",Indole)                       #Tryptophan (Trp)
+Y <- Tyr <- c("CH2", Phenol)                      #Tyrosine (Tyr)
+```
+
+
+Making a graphical representation of the amino acids.  Visited www.webmo.net/demoserver/cgi-bin/webmo/build_molecule.cgi using Mozilla FireFox v23.0 internet browser. Built the respective molecules from the list of fragments to build (Build -> Fragment... -> Category -> Amino Acid). If the Build option is grayed, the Build mode can be toggled using upside-down V icon on the left handside.  Orientated the Amino Acids with the carboxylic group (COO) in the back.  Then extracted the Cartesian coordinates from the Cartesian editor (Tools -> Cartesian Edit...).
+
+```{r}
+
+#Define Vertices and bonds for Amino Acid Backbone (all but the 'R' sidechain)
+AABackbone <- c("C","C","O","O-","N+",rep("H",4))
+AABbPath <- path(1,2,3,2,4) + path(9,1,5,6) + path(7,5,8)
+
+#Convert from subgroups to individual atoms
+Mol2Atm = function(AA){
+  AA <- gsub("_","",AA); AA <- gsub("Methyl","CH3",AA)
+  AA <- gsub("2","H",AA); AA <- gsub("3","HH",AA)
+  AA <- strsplit(AA, split="")
+  AA <- unlist(AA)
+}
+
+#Generate a graphical representation of the Amino Acid
+
+
+gAla <- graph.empty(directed=FALSE) + vertices("C","C",rep("H",3),"N+",rep("H",3),"C","O","O-","H")
+gAla <- gAla + path(5,2,4) + path(3,2,1,6,9) + path(7,6,8) + path(13,1,10,11) + path(11,10,12)
+layout <- matrix(c(0,0,0,1.5215,0,0,1.8875,1.0242,0,1.88710,-.51530,-0.88510,1.884,-.513,.8904,-.4972,.7077,1.2161,-.15040,1.6829,1.2197,-1.5319,.7112,1.2183,-.15510,.2212,2.0645,-.5073,-1.4149,-.002,-1.2091,-1.8122,-.9158,-.2057,-2.1995,.95010,-.35860,.51470,-.8867),ncol=3,byrow=TRUE)
+gAla$layout <- layout.norm(layout)
+rglplot(gAla)
 ```
 
 ```{r}
@@ -49,20 +76,20 @@ Y <- c("CH2", Phenol)                      #Tyrosine (Tyr)
 
 AAclassifier <- function(AA){
   
-  class = data.frame(size,hydrophobic,polar,aromatic)
+  AAclass= data.frame(size,hydrophobic,polar,charge,aromatic)
   n = length(AA)
  
   if(n <= 3){                   #classifier for Small
                                 #and Tiny AA residues
-   class$size <- "Small"     
+   AAclass$size <- "Small"     
     
    if(n < 3){
       
-     class$size <-"Tiny"
+     AAclass$size <-"Tiny"
    }
   }
   else{
-    class$size <- ""
+    AAclass$size <- "Not Small"
   }
   
   if(!is.na(match("C",AA)) == TRUE) {     #classifier for Aromaticity
@@ -72,35 +99,35 @@ AAclassifier <- function(AA){
        AA[match("C",AA):(length(Indole)+1)] == Indole ||
        AA[match("C",AA):(length(Phenol)+1)] == Phenol){
           
-         class$aromatic <- "Aromatic"
+         AAclass$aromatic <- "Aromatic"
     }
   }
   else{
-    class$aromatic <- ""
+    AAclass$aromatic <- "Not Aromatic"
   }
 
-  if(){
+  if(length(grep("OH|SH|NH2",AA)) != 0 || length(grep("+",AA,fixed=TRUE)) !=0 ||
+     length(grep("-",AA,fixed=TRUE)) !=0 || length(grep("C",AA)) == 0){
     
     if(!is.na(match("Methyl_CH",AA)) == TRUE){  #classifierf for Aliphatic
-    class$hydrophobic <- c("Hydrophobic","Aliphatic")    
+    AAclass$hydrophobic <- c("Hydrophobic","Aliphatic")    
     }
   }
-  if(length(grep("OH|SH|+|-",AA,fixed=TRUE)) != 0
-     ){ #classifier for polar
+  if(length(grep("OH|+|-",AA,fixed=TRUE)) != 0){      #classifier for polar
     
-    class$polar = "Polar"
+    AAclass$polar = "Polar"
     
     if(!is.na(match("COO-",AA)) == TRUE){ #classifier for neg. charge
     
-      class$charge <- "Charge(-)"
+      AAclass$charge <- "Charge(-)"
     }
   
     if(length(grep("+",AA,fixed=TRUE)) != 0){ #classifier for pos. charge
     
-      class$charge <- "Charge(+)"
+      AAclass$charge <- "Charge(+)"
     }
   }
-  return(class)
+  return(AAclass)
 }
 ```
 
@@ -148,8 +175,12 @@ AAPI <- url %>%
   html_nodes("table") %>%
   html_table(fill=TRUE)                  #generates the table from the webpage
 AAPI <- AAPI[[2]]
+
 names_AAPI <- AAPI[1,]                   #extracts the names from the first row
-names_AAPI <- gsub("Â","",names_AAPI)    #removes Â characters (Å = alt 0194)
+names_AAPI <- gsub("Â|","",names_AAPI)    #removes Â characters (Å = alt 0194)
+names_AAPI <- gsub("[[:space:]]","",names_AAPI)  #remove all the spaces
+names_AAPI <- sub("oa","o a",names_AAPI)
+
 AAPI <- AAPI[2:21,]                   #extracts the amino acid data   
 AAPI <- gsub("Â| ","",AAPI)             
 AAPI <- gsub("\"","",AAPI)            #removes all the \'s
@@ -159,4 +190,8 @@ AAPI <- gsub(")","",AAPI,fixed=TRUE)  #removes all the )'s
 AAPI <- strsplit(AAPI,split=",")      #splits the character arrays
 AAPI <- as.data.frame(AAPI)           #remakes the data frame/table
 names(AAPI) <- names_AAPI             #replaces the name with the original
+```
+
+```{r}
+sessionInfo()
 ```
