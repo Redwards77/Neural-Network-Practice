@@ -64,7 +64,9 @@ Mol2Atm = function(AA){
 #Define path for conecting bonds in the Amino Acid
 fpath <- function(AA){
   
-  if(length(P) == length(AA) && all(P %in% AA) == TRUE){
+  if(length(P) == length(AA) && all(P %in% AA) == TRUE
+     && all(AA %in% P) == TRUE){
+    
     pAA <- c(c(1,2,2,3,3,2,2,4,8),c(1,1,5,5,6),
              c(1,9,9,12,12,15,15,5,5,7),c(10,9,9,11),
              c(13,12,12,14),c(17,15,15,16))
@@ -176,7 +178,9 @@ VizAA = function(AA){                             ##visualize the amino acid
   AABackbone <- c("C","C","O","O-","N+",rep("H",4))
   
 
-  if(length(P) == length(AA) && all(P %in% AA) == TRUE){
+  if(length(P) == length(AA) && all(P %in% AA) == TRUE  
+     && all(AA %in% P) == TRUE){
+    
     gAA <- graph.empty(directed=FALSE) + vertices(AABackbone[1:8],Mol2Atm(AA))
     gAA <- gAA + edges(fpath(P))
   }
