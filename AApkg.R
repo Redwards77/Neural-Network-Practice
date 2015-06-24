@@ -1,26 +1,16 @@
----
-title: "Amino Acid"
-author: "Richard Edwards"
-date: "June 4, 2015"
-output: html_document
----
-
-
-Coding for the Side Chain group of the 20 common Amino Acids
-```{r}
 #Amino Acids                                         NH2
- #                                                   |
- #All Amino Acids have the general composition of   HC--C(O)OH with the 'R' group
- #                                                   |         specifying the 
- #                                                   R         amino acid residue
- 
- #Defining Aromatic 'R' Groups
- Phenyl <- c("C",rep("CH",5))
- Imidazole <- c("C","CH","NH","CH","N+H")
- Indole <- c("C","CH","NH","C","C",rep("CH",4))
- Phenol <- c("C","CH","CH","C_OH","CH","CH")
- #The following will relate the 1-letter abreviation of 
- #the 20 AA residues with their respecitve 'R' groups
+#                                                   |
+#All Amino Acids have the general composition of   HC--C(O)OH with the 'R' group
+#                                                   |         specifying the 
+#                                                   R         amino acid residue
+
+#Defining Aromatic 'R' Groups
+Phenyl <- c("C",rep("CH",5))
+Imidazole <- c("C","CH","NH","CH","N+H")
+Indole <- c("C","CH","NH","C","C",rep("CH",4))
+Phenol <- c("C","CH","CH","C_OH","CH","CH")
+#The following will relate the 1-letter abreviation of 
+#the 20 AA residues with their respecitve 'R' groups
 
 A <- Ala <- c("CH3")                              #Alanine (Ala)
 C <- Cys <- c("CH2", "SH")                        #Cysteine (Cys)
@@ -42,12 +32,6 @@ T <- Thr <- c("CH","OH","CH3")                   #Threonine (Thr)
 V <- Val <- c("Methyl","CH","CH3")                  #Valine (Val)
 W <- Trp <- c("CH2",Indole)                       #Tryptophan (Trp)
 Y <- Tyr <- c("CH2", Phenol)                      #Tyrosine (Tyr)
-```
-
-
-Making a graphical representation of the amino acids.  Visited www.webmo.net/demoserver/cgi-bin/webmo/build_molecule.cgi using Mozilla FireFox v23.0 internet browser. Built the respective molecules from the list of fragments to build (Build -> Fragment... -> Category -> Amino Acid). If the Build option is grayed, the Build mode can be toggled using upside-down V icon on the left handside.  Orientated the Amino Acids with the carboxylic group (COO) in the back.  Then extracted the Cartesian coordinates from the Cartesian editor (Tools -> Cartesian Edit...).
-
-```{r}
 
 #Convert from subgroups to individual atoms
 Mol2Atm = function(AA){
@@ -75,21 +59,21 @@ fpath <- function(AA){
     if(length(A) == length(AA) && all(A == AA) == TRUE){
       pAA <- c(c(1,10,10,11),c(12,10,10,13))
     }
-  
+    
     if(length(C) == length(AA) && all(C == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,14),c(11,10,10,12))
     }
-  
+    
     if(length(D) == length(AA) && all(D == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,14,14,13,13,15),
                c(11,10,10,12))
     }
-  
+    
     if(length(E) == length(AA) && all(E == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,16,16,17,17,16,16,18),
                c(11,10,10,12),c(14,13,13,15))
     }
-  
+    
     if(length(F) == length(AA) && all(F == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,14,14,16,16,18,18,20,20,22,22,13,13,22,22,23),
                c(11,10,10,12),c(15,14,14,16,16,17),c(19,18,18,20,20,21))
@@ -98,12 +82,12 @@ fpath <- function(AA){
     if(length(G) == length(AA) && all(G == AA) == TRUE){
       pAA <- c(1,10)
     }
-  
+    
     if(length(H) == length(AA) && all(H == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,14,14,16,16,18,18,20,20,13,13,14,14,15),
                c(11,10,10,12),c(16,17),c(19,18,18,20,20,21))
     }
-  
+    
     if(length(I) == length(AA) && all(I == AA) == TRUE){
       pAA <- c(c(1,14,14,15),c(11,10,10,14,14,16,16,19,19,20),
                c(12,10,10,13),c(17,16,16,18),c(21,19,19,22))
@@ -113,53 +97,53 @@ fpath <- function(AA){
       pAA <- c(c(1,10,10,13,13,16,16,19,19,22,22,25),c(11,10,10,12), 
                c(14,13,13,15),c(20,19,19,21),c(23,22,22,24),c(17,16,16,18))
     }
-  
+    
     if(length(L) == length(AA) && all(L == AA) == TRUE){
       pAA <- c(c(1,10,10,17,17,13,13,14),c(11,10,10,12),c(15,13,13,16),
                c(18,17,17,19,19,21),c(20,19,19,22))
     }
-   
+    
     if(length(M) == length(AA) && all(M == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,16,16,17,17,18),c(11,10,10,12), 
                c(14,13,13,15),c(20,17,17,19))
     }
-  
+    
     if(length(N) == length(AA) && all(N == AA) == TRUE){
-     pAA <- c(c(1,10,10,13,13,14,14,13,13,15,15,16),
-              c(11,10,10,12),c(17,15))
+      pAA <- c(c(1,10,10,13,13,14,14,13,13,15,15,16),
+               c(11,10,10,12),c(17,15))
     }  
-  
+    
     if(length(Q) == length(AA) && all(Q == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,16,16,17,17,16,16,18,18,20),
                c(11,10,10,12),c(14,13,13,15),c(19,18))
     }
-  
+    
     if(length(R) == length(AA) && all(R == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,16,16,19,19,20),c(23,22,22,21,21,19), 
                c(24,22,22,21,21,25),c(26,25,25,27),c(11,10,10,12),
                c(14,13,13,15),c(17,16,16,18))
     }
-  
+    
     if(length(S) == length(AA) && all(S == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,14),c(11,10,10,12))
     }
-
+    
     if(length(T) == length(AA) && all(T == AA) == TRUE){
       pAA <- c(c(1,10,10,14,14,15),c(11,10,10,12,12,13),
                c(16,14,14,17))
     }
-  
+    
     if(length(V) == length(AA) && all(V == AA) == TRUE){
       pAA <- c(c(1,14,14,10,10,13),c(11,10,10,12),
                c(15,14,14,16,16,19),c(17,16,16,18))
     }
-  
+    
     if(length(W) == length(AA) && all(W == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,14,14,13,13,19,19,20),c(20,22,22,24),
                c(24,26,26,18,18,19),c(11,10,10,12),c(19,18,18,16,16,17),
                c(15,14,14,16),c(21,20,20,22,22,23),c(25,24,24,26,26,27))
     }
-   
+    
     if(length(Y) == length(AA) && all(Y == AA) == TRUE){
       pAA <- c(c(1,10,10,13,13,14,14,16,16,18,18,21),c(21,23,23,13),
                c(13,14,14,15),c(17,16,16,18,18,19,19,20),
@@ -196,25 +180,21 @@ gAla <- gAla + path(5,2,4) + path(3,2,1,6,9) + path(7,6,8) + path(13,1,10,11) + 
 layout <- matrix(c(0,0,0,1.5215,0,0,1.8875,1.0242,0,1.88710,-.51530,-0.88510,1.884,-.513,.8904,-.4972,.7077,1.2161,-.15040,1.6829,1.2197,-1.5319,.7112,1.2183,-.15510,.2212,2.0645,-.5073,-1.4149,-.002,-1.2091,-1.8122,-.9158,-.2057,-2.1995,.95010,-.35860,.51470,-.8867),ncol=3,byrow=TRUE)
 gAla$layout <- layout.norm(layout)
 rglplot(gAla)
-```
-
-```{r}
-#Classifying AA into groups
 
 AAclassifier <- function(AA){
   
   n = length(AA)
   
   AAclass= data.frame(row.names = "classes")
- 
+  
   if(n <= 3){                   #classifier for Small
-                                #and Tiny AA residues
-   AAclass$size <- "Small"     
+    #and Tiny AA residues
+    AAclass$size <- "Small"     
     
-   if(n < 3){
+    if(n < 3){
       
-     AAclass$size <-"Tiny"
-   }
+      AAclass$size <-"Tiny"
+    }
   }
   else{
     AAclass$size <- "Mid"
@@ -224,10 +204,10 @@ AAclassifier <- function(AA){
     
     
     if(!is.na(match("O-",AA)) == TRUE){ #classifier for neg. charge
-    
+      
       AAclass$charge <- "Negative"
     }
-  
+    
     else{
       AAclass$charge <- "Positive"
     }
@@ -240,37 +220,37 @@ AAclassifier <- function(AA){
   if(length(grep("OH|SH|NH2",AA)) != 0 || length(grep("+",AA,fixed=TRUE)) !=0 ||
      length(grep("-",AA,fixed=TRUE)) !=0 || length(grep("C",AA)) == 0){                   #classifier for hydrophilicity
     
-     AAclass$hydroph <- "Hydrophilic"
-     
-     if(length(grep("SH",AA)) != 0 || length(grep("C",AA)) == 0){        #sub-classifier for polarity
-        AAclass$polarity <- "Nonpolar"
-     }
-     
-     else{
-        AAclass$polarity <- "Polar"
-     }
+    AAclass$hydroph <- "Hydrophilic"
+    
+    if(length(grep("SH",AA)) != 0 || length(grep("C",AA)) == 0){        #sub-classifier for polarity
+      AAclass$polarity <- "Nonpolar"
+    }
+    
+    else{
+      AAclass$polarity <- "Polar"
+    }
   }
   
   else{
     AAclass$hydroph <- "Hydrophobic"
     AAclass$polarity <- "Nonpolar"
   }
-
+  
   if(n > 6 && all(AA[2:7] == Phenyl) == TRUE || 
      n > 5 && all(AA[2:6] == Imidazole) == TRUE ||
      n > 9 && all(AA[2:10] == Indole) == TRUE || 
      n > 6 && all(AA[2:7] == Phenol) == TRUE) {      #classifier for Aromaticity
-          
-         AAclass$Aromatic <- "Yes"
-    }
+    
+    AAclass$Aromatic <- "Yes"
+  }
   
   else{
     AAclass$Aromatic <- "No"
   }
-
+  
   if(!is.na(match("Methyl",AA)) == TRUE){    #classifierf for Aliphatic
-   
-     AAclass$Aliphatic <- "Yes"    
+    
+    AAclass$Aliphatic <- "Yes"    
   }
   
   else{
@@ -318,70 +298,3 @@ num.AAclass <- function(AA){
   
   return(numClass)
 }
-
-```
-
-```{r}
-library(selectr)
-#Acquire Mutant Frequency Table
- html("http://www.abren.net/protherm/mutation.html")%>%
-+ html_node("table")%>%
-+ html_table(fill=T) -> aATable
-
-#---------------------------------------------------------------------------
-
-#Acquire Further Data
-url <- "http://www.abren.net/protherm/protherm_result.php?&DISP01=1&DISP02=1&DISP10=1&DISP14=1&DISP16=1&DISP18=1&DISP19=1&DISP22=1&DISP23=1&DISP24=1&DISP26=1&DISP30=1&DISP31=1&DISP38=1&NUMBER2=3000000&SOURCE=human&MUTA-C0=on&ASA-C=0-Any&ASA3=0-%&PH1=6.8&PH2=8.2&COUNT_E2=980&COUNT_S2=0"
-
-xp <- '/html/body/table[2]'
-
-AASearch <- url %>%
-  html() %>%
-  html_nodes(xpath=xp) %>%
-  html_table(fill=TRUE)
-AASearch <- AASearch[[1]]
-AASearch <- AASearch[-c(16:21)]
-names(AASearch) <- c("Entry","Protein","Source","Mutation","dG_H2O","dG","T", "Tm","dHcal","m","Cm","pH","Measure","Method",	"REFERENCE")
-
-#--------------------------------------------------------------------------
-
-url<- "http://p53.iarc.fr/AAProperties.aspx"
-  
-xp <- '//*[@id="aapropform"]/table'
-
-AAProp <- url %>%
-  html() %>%
-  html_nodes(xpath=xp) %>%
-  html_table(fill=TRUE)
-AAProp <- AAProp[[1]]
-AAProp <- AAProp[1:(nrow(AAProp)-1),]
-
-#---------------------------------------------------------------------------
-
-url <- "http://www.mhhe.com/physsci/chemistry/carey5e/Ch27/ch27-1-4-2.html"
-
-AAPI <- url %>%
-  html() %>%
-  html_nodes("table") %>%
-  html_table(fill=TRUE)                  #generates the table from the webpage
-AAPI <- AAPI[[2]]
-
-names_AAPI <- AAPI[1,]                   #extracts the names from the first row
-names_AAPI <- gsub("Â|","",names_AAPI)    #removes Â characters (Å = alt 0194)
-names_AAPI <- gsub("[[:space:]]","",names_AAPI)  #remove all the spaces
-names_AAPI <- sub("oa","o a",names_AAPI)
-
-AAPI <- AAPI[2:21,]                   #extracts the amino acid data   
-AAPI <- gsub("Â| ","",AAPI)             
-AAPI <- gsub("\"","",AAPI)            #removes all the \'s
-AAPI <- sub("c","",AAPI)              #removes the 1st c from each line
-AAPI <- gsub("(","",AAPI,fixed=TRUE)  #removes all the ('s
-AAPI <- gsub(")","",AAPI,fixed=TRUE)  #removes all the )'s
-AAPI <- strsplit(AAPI,split=",")      #splits the character arrays
-AAPI <- as.data.frame(AAPI)           #remakes the data frame/table
-names(AAPI) <- names_AAPI             #replaces the name with the original
-```
-
-```{r}
-sessionInfo()
-```
