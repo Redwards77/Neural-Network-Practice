@@ -246,8 +246,7 @@ fPath.Peptide <- function(AASeq){
                c(13,14,14,15),c(17,16,16,18,18,19,19,20),
                c(22,21,21,23,23,24),c(11,10,10,12))
     }
-  }  
- 
+  
   else{
     
     if(terminus == "N"|"Nterminus"|"NTerminus"|"N-terminus"|"N-Terminus"){
@@ -465,4 +464,6 @@ fPath.Peptide <- function(AASeq){
   
   return(AAPath)
 }
+
+#need to recode for visuals
 ```
