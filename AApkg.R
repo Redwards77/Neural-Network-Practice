@@ -175,11 +175,11 @@ VizAA = function(AA){                             ##visualize the amino acid
 
 #Generate a graphical representation of the Amino Acid
 
-gAla <- graph.empty(directed=FALSE) + vertices("C","C",rep("H",3),"N+",rep("H",3),"C","O","O-","H")
-gAla <- gAla + path(5,2,4) + path(3,2,1,6,9) + path(7,6,8) + path(13,1,10,11) + path(11,10,12)
-layout <- matrix(c(0,0,0,1.5215,0,0,1.8875,1.0242,0,1.88710,-.51530,-0.88510,1.884,-.513,.8904,-.4972,.7077,1.2161,-.15040,1.6829,1.2197,-1.5319,.7112,1.2183,-.15510,.2212,2.0645,-.5073,-1.4149,-.002,-1.2091,-1.8122,-.9158,-.2057,-2.1995,.95010,-.35860,.51470,-.8867),ncol=3,byrow=TRUE)
-gAla$layout <- layout.norm(layout)
-rglplot(gAla)
+#gAla <- graph.empty(directed=FALSE) + vertices("C","C",rep("H",3),"N+",rep("H",3),"C","O","O-","H")
+#gAla <- gAla + path(5,2,4) + path(3,2,1,6,9) + path(7,6,8) + path(13,1,10,11) + path(11,10,12)
+#layout <- matrix(c(0,0,0,1.5215,0,0,1.8875,1.0242,0,1.88710,-.51530,-0.88510,1.884,-.513,.8904,-.4972,.7077,1.2161,-.15040,1.6829,1.2197,-1.5319,.7112,1.2183,-.15510,.2212,2.0645,-.5073,-1.4149,-.002,-1.2091,-1.8122,-.9158,-.2057,-2.1995,.95010,-.35860,.51470,-.8867),ncol=3,byrow=TRUE)
+#gAla$layout <- layout.norm(layout)
+#rglplot(gAla)
 
 AAclassifier <- function(AA){
   

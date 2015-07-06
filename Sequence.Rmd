@@ -11,6 +11,7 @@ Import source data from prior file.
 library(igraph)
 library(rgl)
 source("C:/Documents and Settings/Research/Redwards/Neural-Network-Practice/AApkg.R")
+source("C:/Documents and Settings/Research/Download_PDB_Info.Rmd")
 ```
 
 Analyzing Peptides
@@ -397,7 +398,9 @@ VizPep = function(AASeq){                             ##visualize the Peptide
 #-------------------------------------------------#
 
 Peptide.atm <- Gen.Peptide(AASeq)
-layout <- matrix(c(0,0,0,rnorm(3*(length(unlist(Peptide.atm))-1))),ncol=3,byrow=TRUE)
+l.PS <- length(unlist(Peptide.atm))
+layout<- matrix(c(0,0,0,rnorm(3*(l.PS-1))),ncol=3,byrow=TRUE)
+
 bond.angle <- function(x,y,z,layout){
   n <- layout[x,]
   m <- layout[y,]
@@ -408,43 +411,66 @@ bond.angle <- function(x,y,z,layout){
   n.output <- (v%*%w)/sqrt(sum(v^2)*sum(w^2))
   theta <- acos(n.output)*180/pi
   print(theta)
-  if(abs(theta-109.5) > 0.05){
-    
+  
+  attempt = 1
+  resets = 0
+  while(abs(theta-109.5) > .05){
     
     if(all(o == layout.z) == TRUE){
-      weight.layer <- matrix(c(rnorm(3)),3,1)
-      bias.layer   <- matrix(c(rnorm(3)),3,1)
-      weight.out   <- matrix(c(rnorm(3)),3,1)
+      weight.layer <- matrix(c(rnorm(30)),10,3)
+      bias.layer   <- matrix(c(rnorm(10)),10,1)
+      weight.out   <- matrix(c(rnorm(30)),3,10)
       bias.out     <- matrix(c(rnorm(3)),3,1)
     }
     
     o  <-  matrix(o,3,1) 
-    a1 <-  tanh(weight.layer * o + bias.layer)
-    a2 <-  weight.out*a1 + bias.out
-    layout[z,] <- a2
+    a1 <-  tanh(weight.layer%*%o + bias.layer)
+    a2 <-  weight.out%*%a1 + bias.out
+    
     
     w = n - a2
     n.output <- (v%*%w)/sqrt(sum(v^2)*sum(w^2))
     theta <- acos(n.output)*180/pi
-    print(theta)
-    print(layout[z,])
-    if(abs(theta-109.5) > 0.05){
     
-      error.output <- as.matrix(109.5 - theta)
-      Diag.out     <- as.matrix((-1)/sqrt(1-(n.output)^2))
-      Diag.layer   <- matrix(c(1-(a1[1])^2,0,0,0,1-(a1[2])^2,0,0,0,1-(a1[3])^2),3,3,byrow=TRUE)
+    if(abs(theta-109.5) > .05){
+      attempt = attempt + 1
+      if(attempt == 751){break}
+      
+      t <- -1/3*sqrt(sum(v^2))*sqrt(sum(w^2))
+      error.output <- as.matrix(t - v%*%w)
+      Diag.out     <- matrix(c(rep(1,1)),3,1)
+      Diag.layer   <- matrix(c(1-(a1[1])^2,rep(0,10),1-(a1[2])^2,rep(0,10),1-(a1[3])^2,rep(0,10),
+                               1-(a1[4])^2,rep(0,10),1-(a1[5])^2,rep(0,10),1-(a1[6])^2,rep(0,10),
+                               1-(a1[7])^2,rep(0,10),1-(a1[8])^2,rep(0,10),1-(a1[9])^2,rep(0,10),
+                               1-(a1[10])),10,10,byrow=TRUE)
     
       sens.output <- -2*Diag.out %*% error.output
-      sens.layer  <- Diag.layer%*%(weight.out)%*%sens.output
+      sens.layer  <- Diag.layer%*%t(weight.out)%*%sens.output
       
-      weight.layer <- weight.layer - 0.1*sens.layer*(o)
-      bias.layer   <- bias.layer - 0.1*sens.layer
-      weight.out   <- weight.out - 0.1*(a1)%*% sens.output
-      bias.out     <- bias.out - as.matrix(c(rep(0.1,3)))%*%sens.output
+      weight.layer <- weight.layer - 0.15*sens.layer%*%t(o)
+      bias.layer   <- bias.layer - 0.15*sens.layer
+      weight.out   <- weight.out - 0.15*sens.output%*%t(a1)
+      bias.out     <- bias.out - 0.15*sens.output
       
+      if(sqrt((v[1]-w[1])^2+(v[2]-w[2])^2+(v[3]-w[3])^2) > 10){
+        resets = resets + 1
+        layout[z,] <- layout.z <- rnorm(3,mean = resets)
+        #print(theta)
+      }
       o <- layout[z,]
+      
+      if(is.integer(attempt/250) == TRUE){
+        layout[y,] <- rnorm(3)
+        m <- layout[y,]
+        v <- n - m
+      }
+      if(is.integer(attempt/25)){print(theta)}
     }
   }
-  
+  print(theta)
+  print(layout[z,])
+  return(layout)
 }
 ```
+
+
