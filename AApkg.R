@@ -183,16 +183,22 @@ VizAA = function(AA){                             ##visualize the amino acid
 
 AAclassifier <- function(AA){
   
+  if(AA == "A"){AA = A};if(AA == "C"){AA = C}
+  if(AA == "D"){AA = D};if(AA == "E"){AA = E};if(AA == "F"){AA = F}
+  if(AA == "G"){AA = G};if(AA == "H"){AA = H};if(AA == "I"){AA = I}
+  if(AA == "K"){AA = K};if(AA == "L"){AA = L};if(AA == "M"){AA = M}
+  if(AA == "N"){AA = N};if(AA == "P"){AA = P};if(AA == "Q"){AA = Q}
+  if(AA == "R"){AA = R};if(AA == "S"){AA = S};if(AA == "T"){AA = T}
+  if(AA == "V"){AA = V};if(AA == "W"){AA = W};if(AA == "Y"){AA = Y}
+  
   n = length(AA)
   
   AAclass= data.frame(row.names = "classes")
   
-  if(n <= 3){                   #classifier for Small
-    #and Tiny AA residues
+  if(n <= 3){                   #classifier for size
     AAclass$size <- "Small"     
     
     if(n < 3){
-      
       AAclass$size <-"Tiny"
     }
   }
@@ -200,11 +206,9 @@ AAclassifier <- function(AA){
     AAclass$size <- "Mid"
   }
   
-  if(length(grep("+",AA,fixed=TRUE)) !=0 || length(grep("-",AA,fixed=TRUE)) !=0)  {      #classifier for charge
-    
-    
-    if(!is.na(match("O-",AA)) == TRUE){ #classifier for neg. charge
-      
+  if(length(grep("+",AA,fixed=TRUE)) !=0 || length(grep("-",AA,fixed=TRUE)) !=0)  {
+                                                                    #classifier for charge
+    if(!is.na(match("O-",AA)) == TRUE){
       AAclass$charge <- "Negative"
     }
     
@@ -217,12 +221,12 @@ AAclassifier <- function(AA){
     AAclass$charge <- "Neutral"
   }
   
-  if(length(grep("OH|SH|NH2",AA)) != 0 || length(grep("+",AA,fixed=TRUE)) !=0 ||
-     length(grep("-",AA,fixed=TRUE)) !=0 || length(grep("C",AA)) == 0){                   #classifier for hydrophilicity
+  if(length(grep("OH|NH2",AA)) != 0 || length(grep("+",AA,fixed=TRUE)) !=0 ||
+     length(grep("-",AA,fixed=TRUE)) !=0){       #classifier for hydrophilicity
     
     AAclass$hydroph <- "Hydrophilic"
     
-    if(length(grep("SH",AA)) != 0 || length(grep("C",AA)) == 0){        #sub-classifier for polarity
+    if(length(grep("C",AA)) == 0){       #sub-classifier for polarity
       AAclass$polarity <- "Nonpolar"
     }
     
