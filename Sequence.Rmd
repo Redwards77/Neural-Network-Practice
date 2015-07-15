@@ -498,35 +498,58 @@ bond.angle <- function(x,y,z,layout){
 
 Input Neurons
 ```{r}
-#First neuron inputs will be pH, Temperature, & AA numerical vector
-
-N1 <- function(PDB_ID,mutation){
+url <- "http://folding.biofold.org/i-mutant//pages/dbMut3D.html"
+  df <- readHTMLTable(url)
+  df <- as.data.frame(df[[5]])
+  colm_names <- as.character(as.matrix(df)[1,])
+  names(df) <- colm_names
+  df <- df[3:nrow(df),]
+  PDB_ids <- as.character(df[,1])
+  Mutations <- as.character(df[,2])
+  DDG <- as.numeric(df[,6])
+  train <- sample(1948,600)
+  
+Input_Neurons<- function(n){
+  # n is a number from 1 to 1948
+  
+  # N1 neurons
+  # First neuron inputs will be pH, Temperature, & AA numerical vector
+  
+  PDB_ID <- PDB_ids[n]
+  mutation <- mutations[n]
   PDB_file <- getURL( url = paste0("http://www.rcsb.org/pdb/files/",PDB_ID,".pdb"))
   PDB_file <- gsub("[[:space:]]","",PDB_file)  #remove all spaces and gaps
   #Remove all non-essential physiolocial data
   # ^ matches the beginning of a line
   # . matches any character and .* matches any character any number of times
   # $ matches the end of the string
+  
   Temperature <- sub("^.*KELVIN):","",PDB_file)
   Temperature <- sub("REMARK.*$","",Temperature)
   Temperature <- as.numeric(Temperature)
+  
   pH <- sub("^.*PH:","",PDB_file)
   pH <- sub("REMARK.*$","",pH)
   pH <- as.numeric(pH)
-#-----------------------------------------------------------------#
+
   mutate <- mutate_feature(mutation)
+  
   N1 <- c(pH,Temperature,mutate)
-  return(N1)
+  #--------------------------------#
+  # N2 neurons
+  # Second portion of the input neurons will be
+  # characteristic difference between the native
+  # and mutated amino acid
+  phys_native <- 
+  
+  
+  
+  
+  
+  return(Neurons)
 }
 
-N2 <- function()
-  url <- "http://folding.biofold.org/i-mutant//pages/dbMut3D.html"
-  Train <- readHTMLTable(url)
-
-
-
-
-
+  
 
 
 
