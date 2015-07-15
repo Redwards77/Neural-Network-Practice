@@ -12,6 +12,7 @@ library(igraph)
 library(rgl)
 source("C:/Documents and Settings/Research/Redwards/Neural-Network-Practice/AApkg.R")
 source("C:/Documents and Settings/Research/Redwards/Neural-Network-Practice/Seq_Mut_pkg.R")
+source("C:/Documents and Settings/Research/Redwards/Neural-Network-Practice/UsingBio3d.R")
 
 ```
 
@@ -430,7 +431,7 @@ bond.angle <- function(x,y,z,layout){
   v = n - m; w = n - o
   n.output <- (v%*%w)/sqrt(sum(v^2)*sum(w^2))
   theta <- acos(n.output)*180/pi
-  print(theta)
+  #print(theta)
   
   attempt = 1
   resets = 0
@@ -454,7 +455,7 @@ bond.angle <- function(x,y,z,layout){
     
     if(abs(theta-109.5) > .05){
       attempt = attempt + 1
-      if(attempt == 751){break}
+      #if(attempt == 751){break}
       
       t <- -1/3*sqrt(sum(v^2))*sqrt(sum(w^2))
       error.output <- as.matrix(t - v%*%w)
@@ -479,18 +480,55 @@ bond.angle <- function(x,y,z,layout){
       }
       o <- layout[z,]
       
-      if(is.integer(attempt/250) == TRUE){
-        layout[y,] <- rnorm(3)
-        m <- layout[y,]
-        v <- n - m
-      }
-      if(is.integer(attempt/25)){print(theta)}
+      #if(is.integer(attempt/100) == TRUE){
+       # layout[y,] <- rnorm(3)
+       # m <- layout[y,]
+       # v <- n - m
+      #}
+     # if(is.integer(attempt/25)){print(theta)}
     }
   }
-  print(theta)
-  print(layout[z,])
+  #print(theta)
+  #print(layout[z,])
   return(layout)
 }
+```
+
+
+Input Neurons
+```{r}
+#First neuron inputs will be pH, Temperature, & AA numerical vector
+
+N1 <- function(PDB_ID,mutation){
+  PDB_file <- getURL( url = paste0("http://www.rcsb.org/pdb/files/",PDB_ID,".pdb"))
+  PDB_file <- gsub("[[:space:]]","",PDB_file)  #remove all spaces and gaps
+  #Remove all non-essential physiolocial data
+  # ^ matches the beginning of a line
+  # . matches any character and .* matches any character any number of times
+  # $ matches the end of the string
+  Temperature <- sub("^.*KELVIN):","",PDB_file)
+  Temperature <- sub("REMARK.*$","",Temperature)
+  Temperature <- as.numeric(Temperature)
+  pH <- sub("^.*PH:","",PDB_file)
+  pH <- sub("REMARK.*$","",pH)
+  pH <- as.numeric(pH)
+#-----------------------------------------------------------------#
+  mutate <- mutate_feature(mutation)
+  N1 <- c(pH,Temperature,mutate)
+  return(N1)
+}
+
+N2 <- function()
+  url <- "http://folding.biofold.org/i-mutant//pages/dbMut3D.html"
+  Train <- readHTMLTable(url)
+
+
+
+
+
+
+
+
 ```
 
 
