@@ -510,8 +510,8 @@ df <- df[3:nrow(df),]
 row.names(df) <- c(1:nrow(df))
 PDB_ids <- as.character(df[,1])
 Mutations <- as.character(df[,2])
-DDG <- as.numeric(df[,6])
-train <- sample(1948,600)
+DDG <- as.matrix(c(df[,6]),ncol=1)
+train <- sample(1948,1100)
   
 Input_Neurons<- function(n){
   # n is a number from 1 to 1948
@@ -528,14 +528,10 @@ Input_Neurons<- function(n){
   # . matches any character and .* matches any character any number of times
   # $ matches the end of the string
   
-  Temperature <- sub("^.*KELVIN):","",PDB_file)
-  Temperature <- sub("REMARK.*$","",Temperature)
-  Temperature <- as.numeric(Temperature)
+  Temperature <- as.numeric(as.matrix(df)[n,4]) + 273
   
-  pH <- sub("^.*PH:","",PDB_file)
-  pH <- sub("REMARK.*$","",pH)
-  pH <- as.numeric(pH)
-
+  pH <- as.numeric(as.matrix(df)[n,5])
+  
   mutate <- mutate_feature(mutation)
   
   N1 <- c(pH,Temperature,mutate)
@@ -548,13 +544,13 @@ Input_Neurons<- function(n){
   phys_native <- num.AAclass(mut$before)
   phys_mutate <- num.AAclass(mut$after)
   N2 <- phys_mutate - phys_native
-
-  Neurons <- matrix(c(N1,N2),ncol=1)
+  Neurons <- c(N1,N2)
+  #Neurons <- matrix(c(N1,N2),ncol=1)
   return(Neurons)
 }
 
-#something wrong iw
-feature_matrix <- sapply(1:1948,Input_Neurons())
+feature_matrix <- mapply(Input_Neurons,1:1948)  #Takes about 24 minutes
+NeuralNet <- nnet(feature_matrix[,train], DDG[train])
 
 
   

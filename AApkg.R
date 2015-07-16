@@ -289,7 +289,7 @@ AAclassifier <- function(AA){
   }
   
   return(AAclass)
-} #why does this not transfer?
+} 
 
 #Now need to convert the dataframe classifier into a numerical vector
 num.AAclass <- function(AA){
