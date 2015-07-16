@@ -183,13 +183,16 @@ VizAA = function(AA){                             ##visualize the amino acid
 
 AAclassifier <- function(AA){
   
-  if(AA == "A"){AA = A};if(AA == "C"){AA = C}
-  if(AA == "D"){AA = D};if(AA == "E"){AA = E};if(AA == "F"){AA = F}
-  if(AA == "G"){AA = G};if(AA == "H"){AA = H};if(AA == "I"){AA = I}
-  if(AA == "K"){AA = K};if(AA == "L"){AA = L};if(AA == "M"){AA = M}
-  if(AA == "N"){AA = N};if(AA == "P"){AA = P};if(AA == "Q"){AA = Q}
-  if(AA == "R"){AA = R};if(AA == "S"){AA = S};if(AA == "T"){AA = T}
-  if(AA == "V"){AA = V};if(AA == "W"){AA = W};if(AA == "Y"){AA = Y}
+  if(nchar(AA) == 1 && AA == "A"){AA = A};if(nchar(AA) == 1 && AA == "C"){AA = C}
+  if(nchar(AA) == 1 && AA == "D"){AA = D};if(nchar(AA) == 1 && AA == "E"){AA = E}
+  if(nchar(AA) == 1 && AA == "F"){AA = F};if(nchar(AA) == 1 && AA == "G"){AA = G}
+  if(nchar(AA) == 1 && AA == "H"){AA = H};if(nchar(AA) == 1 && AA == "I"){AA = I}
+  if(nchar(AA) == 1 && AA == "K"){AA = K};if(nchar(AA) == 1 && AA == "L"){AA = L}
+  if(nchar(AA) == 1 && AA == "M"){AA = M};if(nchar(AA) == 1 && AA == "N"){AA = N}
+  if(nchar(AA) == 1 && AA == "P"){AA = P};if(nchar(AA) == 1 && AA == "Q"){AA = Q}
+  if(nchar(AA) == 1 && AA == "R"){AA = R};if(nchar(AA) == 1 && AA == "S"){AA = S}
+  if(nchar(AA) == 1 && AA == "T"){AA = T};if(nchar(AA) == 1 && AA == "V"){AA = V}
+  if(nchar(AA) == 1 && AA == "W"){AA = W};if(nchar(AA) == 1 && AA == "Y"){AA = Y}
   
   n = length(AA)
   
@@ -286,7 +289,7 @@ AAclassifier <- function(AA){
   }
   
   return(AAclass)
-}
+} #why does this not transfer?
 
 #Now need to convert the dataframe classifier into a numerical vector
 num.AAclass <- function(AA){

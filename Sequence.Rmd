@@ -507,6 +507,7 @@ df <- as.data.frame(df[[5]])
 colm_names <- as.character(as.matrix(df)[1,])
 names(df) <- colm_names
 df <- df[3:nrow(df),]
+row.names(df) <- c(1:nrow(df))
 PDB_ids <- as.character(df[,1])
 Mutations <- as.character(df[,2])
 DDG <- as.numeric(df[,6])
@@ -548,7 +549,7 @@ Input_Neurons<- function(n){
   phys_mutate <- num.AAclass(mut$after)
   N2 <- phys_mutate - phys_native
 
-  Neurons <- c(N1,N2)
+  Neurons <- matrix(c(N1,N2),ncol=1)
   return(Neurons)
 }
 
