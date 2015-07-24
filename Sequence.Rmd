@@ -510,8 +510,8 @@ df <- df[3:nrow(df),]
 row.names(df) <- c(1:nrow(df))
 PDB_ids <- as.character(df[,1])
 Mutations <- as.character(df[,2])
-DDG <- as.matrix(c(df[,6]),ncol=1)
-train <- sample(1948,1100)
+DDG <- as.matrix(as.numeric(as.matrix(df[,6],ncol=1)),ncol=1)
+train <- sample(1948,750)
   
 Input_Neurons<- function(n){
   # n is a number from 1 to 1948
@@ -544,19 +544,31 @@ Input_Neurons<- function(n){
   phys_native <- num.AAclass(mut$before)
   phys_mutate <- num.AAclass(mut$after)
   N2 <- phys_mutate - phys_native
-  Neurons <- c(N1,N2)
+  
+  acc <- solventAcc(PDB_ID,mutation)
+  
+  Neurons <- c(N1,N2,acc)
   #Neurons <- matrix(c(N1,N2),ncol=1)
   return(Neurons)
 }
 
-feature_matrix <- mapply(Input_Neurons,1:1948)  #Takes about 24 minutes
-NeuralNet <- nnet(feature_matrix[,train], DDG[train])
+#feature_matrix <- mapply(Input_Neurons,1:1948)  #Takes about 24 minutes
+feature_matrix <- read.csv("Neural_Network_Inputs.csv",fill = TRUE)
+feature_matrix <- feature_matrix[-c(1)]
+
+NeuralNet <- nnet(feature_matrix[train,], DDG[train,],size = 50,decay = 0.0000001,rang = 0.05,Wts = .25*Wts,linout = TRUE, maxit = 10000, MaxNWts = 2000)
+
+result_matrix <- matrix(predict(NeuralNet,feature_matrix[-train,]),ncol=1)
+result_matrix <- cbind(DDG[-train,],result_matrix)
+
+Wts <- NeuralNet$wts
+Wts[1]
+
+109.180182
+132
 
 
-  
-
-
-
+578.331911
 ```
 
 
